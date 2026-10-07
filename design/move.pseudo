@@ -7,19 +7,84 @@
 # Write pseudocode, not Python code. Use clear indentation and course-appropriate
 # keywords such as INPUT, OUTPUT, IF, ELSE, WHILE, SET, or similar terms.
 
-# TODO 1: Identify the information the movement process needs.
-# Consider the player's current room and movement command.
-
-# TODO 2: Prompt for and receive the player's movement command.
-
-# TODO 3: Validate whether the requested movement is possible from the
-# current room. Show the decision clearly.
-
-# TODO 4: Describe what happens when the movement command is valid.
-# Include the room update and player output.
-
-# TODO 5: Describe what happens when the movement command is invalid.
-# Include the output the player should receive.
-
-# TODO 6: Show how movement fits into repeated gameplay.
-# The final game continues accepting commands until a required ending occurs.
+Function: move_player(current_room, direction)
+ 
+IF current_room = 'Great Hall' THEN
+IF direction = 'North' THEN
+current_room = 'Dungeon'
+ELSE IF direction = 'South' THEN
+current_room = 'Bedroom'
+ELSE IF direction = 'East' THEN
+current_room = 'Kitchen'
+ELSE IF direction = 'West' THEN
+current_room = 'Library'
+ELSE
+OUTPUT 'Invalid direction'
+END IF
+END IF
+ 
+IF current_room = 'Dungeon' THEN
+IF direction = 'South' THEN
+current_room = 'Great Hall'
+ELSE IF direction = 'East' THEN
+current_room = 'Gallery'
+ELSE
+OUTPUT 'Invalid direction'
+END IF
+END IF
+ 
+IF current_room = 'Gallery' THEN
+IF direction = 'West' THEN
+current_room = 'Dungeon'
+ELSE
+OUTPUT 'Invalid direction'
+END IF
+END IF
+ 
+IF current_room = 'Library' THEN
+IF direction = 'East' THEN
+current_room = 'Great Hall'
+ELSE
+OUTPUT 'Invalid direction'
+END IF
+END IF
+ 
+IF current_room = 'Kitchen' THEN
+IF direction = 'West' THEN
+current_room = 'Great Hall'
+ELSE IF direction = 'North' THEN
+current_room = 'Dining Room'
+ELSE
+OUTPUT 'Invalid direction'
+END IF
+END IF
+ 
+IF current_room = 'Dining Room' THEN
+IF direction = 'South' THEN
+current_room = 'Kitchen'
+ELSE
+OUTPUT 'Invalid direction'
+END IF
+END IF
+ 
+IF current_room = 'Bedroom' THEN
+IF direction = 'North' THEN
+current_room = 'Great Hall'
+ELSE IF direction = 'East' THEN
+current_room = 'Cellar'
+ELSE
+OUTPUT 'Invalid direction'
+END IF
+END IF
+ 
+IF current_room = 'Cellar' THEN
+IF direction = 'West' THEN
+current_room = 'Bedroom'
+ELSE
+OUTPUT 'Invalid direction'
+END IF
+END IF
+ 
+RETURN current_room
+ 
+End Function
