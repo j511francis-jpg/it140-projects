@@ -9,22 +9,55 @@
 
 START get_item
 
-    # TODO 1: Identify the information the get-item process needs.
-    # Consider the current room, item in that room, and player's inventory.
+// Identify the information the item system needs
+SET rooms_items = {
+    'Great Hall': 'No Item',
+    'Library': 'Book',
+    'Bedroom': 'Armor',
+    'Cellar': 'Helmet',
+    'Kitchen': 'Sandwich',
+    'Dungeon': 'Sword',
+    'Gallery': 'Shield',
+    'Dining Room': 'Dragon'
+}
+SET inventory = []
+SET current_room = "Great Hall"
+SET player_command = ""
 
-    # TODO 2: Prompt for and receive the player's get-item command.
-
-    # TODO 3: Validate whether the requested item is available in the current
-    # room. Show the decision clearly.
-
-    # TODO 4: Describe what happens when the item request is valid.
-    # Include the inventory update and player output.
-
-    # TODO 5: Describe what happens when the item request is invalid.
-    # Include the output the player should receive.
-
-    # TODO 6: Show how the process returns to or continues the larger gameplay
-    # loop after the command is handled.
+// Gameplay loop for item interaction
+WHILE current_room NOT EQUAL TO "Dining Room"
+    OUTPUT "You are in the " + current_room
+    
+    // Check if the current room contains a collectible item
+    IF rooms_items[current_room] NOT EQUAL TO "No Item" THEN
+        OUTPUT "You see a " + rooms_items[current_room] + " here!"
+        
+        // Prompt for and receive the player's item command
+        OUTPUT "Type 'get [item]' to pick it up or enter a direction to leave: "
+        INPUT player_command
+        
+        // Validate whether the command matches the item in the room
+        IF player_command EQUAL TO "get " + rooms_items[current_room] THEN
+            
+            // Handle valid collection: add to inventory and remove from room map
+            APPEND rooms_items[current_room] TO inventory
+            OUTPUT "You picked up the " + rooms_items[current_room] + "!"
+            SET rooms_items[current_room] = "No Item"
+            
+        ELSE IF player_command STARTS WITH "get" THEN
+            // Handle invalid/misspelled item command
+            OUTPUT "That item is not in this room!"
+        ELSE
+            // Player chose to move rooms instead of taking the item
+            OUTPUT "You left the item behind."
+        ENDIF
+    ELSE
+        OUTPUT "There are no items left in this room."
+    ENDIF
+    
+    // (Movement logic occurs here to update current_room)
+    
+ENDWHILE
 
 END get_item
 
