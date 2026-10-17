@@ -1,45 +1,129 @@
-"""Project Two starter for the student's text-based adventure game."""
-
-# TODO: Add the full-name comment required by Project Two directions.
-
-
+# Display instructions
 def show_instructions():
-    """Display the game objective and available commands."""
-    # TODO: Print instructions that match your game and commands.
-    pass
+    print("""
+Text Adventure Game
+Collect all 6 items before finding the villain to win.
+Move commands: go North, go South, go East, go West
+Add to Inventory: get [item]
+Type 'exit' to quit the game
+""")
 
 
+# Display player status
 def show_status(current_room, inventory, rooms):
-    """Display the player's current game status."""
-    # TODO: Show the current room.
-    # TODO: Show the current inventory.
-    # TODO: Show the current-room item when one is available.
-    pass
+    print("\n---------------------------")
+    print("You are in the", current_room)
+    print("Inventory:", inventory)
+
+    if "item" in rooms[current_room]:
+        print("You see a", rooms[current_room]["item"])
+
+    print("---------------------------")
 
 
 def main():
-    """Run the main gameplay loop."""
-    # TODO: Create the full room/item dictionary from your Project One map.
 
-    # TODO: Set the player's starting room.
+    # Room dictionary
+    rooms = {
+        'Living Room': {'North': 'Kitchen', 'East': 'Bedroom'},
+        'Kitchen': {
+            'South': 'Living Room',
+            'East': 'Dining Room',
+            'item': 'Key'
+        },
+        'Dining Room': {
+            'West': 'Kitchen',
+            'North': 'Garage',
+            'item': 'Shield'
+        },
+        'Garage': {
+            'South': 'Dining Room',
+            'item': 'Helmet'
+        },
+        'Bedroom': {
+            'West': 'Living Room',
+            'North': 'Bathroom',
+            'item': 'Armor'
+        },
+        'Bathroom': {
+            'South': 'Bedroom',
+            'East': 'Office',
+            'item': 'Potion'
+        },
+        'Office': {
+            'West': 'Bathroom',
+            'North': 'Dungeon',
+            'item': 'Sword'
+        },
+        'Dungeon': {
+            'South': 'Office',
+            'item': 'Villain'
+        }
+    }
 
-    # TODO: Create the player's inventory.
+    # Starting values
+    current_room = 'Living Room'
+    inventory = []
+    total_items = 6
 
-    # TODO: Call the instruction function at the appropriate time.
+    show_instructions()
 
-    # TODO: Create the gameplay loop.
-    # Within the loop:
-    #   - Show player status.
-    #   - Prompt for the player's next command.
-    #   - Handle valid movement commands.
-    #   - Handle valid get-item commands.
-    #   - Validate invalid commands.
-    #   - Update room/inventory state when appropriate.
-    #   - Detect and display the required winning outcome.
-    #   - Detect and display the required losing outcome.
-    #   - End the loop when the player has won or lost.
-    pass
+    # Main game loop
+    while True:
+
+        show_status(current_room, inventory, rooms)
+
+        move = input("Enter your move: ").strip()
+
+        if move.lower() == "exit":
+            print("Thanks for playing!")
+            break
+
+        command = move.split()
+
+        # Movement command
+        if len(command) == 2 and command[0].lower() == "go":
+
+            direction = command[1].capitalize()
+
+            if direction in rooms[current_room]:
+                current_room = rooms[current_room][direction]
+
+                # Check if player entered the Dungeon
+                if current_room == "Dungeon":
+
+                    if len(inventory) == total_items:
+                        print("\nCongratulations!")
+                        print("You collected all items and defeated the villain!")
+                        print("YOU WIN!")
+                    else:
+                        print("\Thanks for playing the game. Hope you enjoyed it.")
+
+                    break
+
+            else:
+                print("You can't go that way!")
+
+        # Get item command
+        elif len(command) >= 2 and command[0].lower() == "get":
+
+            item_name = " ".join(command[1:])
+
+            if (
+                "item" in rooms[current_room]
+                and rooms[current_room]["item"] == item_name
+            ):
+                inventory.append(item_name)
+                print(item_name, "collected!")
+
+                del rooms[current_room]["item"]
+
+            else:
+                print("That item is not in this room.")
+
+        # Invalid command
+        else:
+            print("Invalid command. Try 'go North' or 'get Key'.")
 
 
-if __name__ == "__main__":
-    main()
+# Run game
